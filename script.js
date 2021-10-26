@@ -1,4 +1,8 @@
-//chart Ajax
+let noScript = document.createElement('noscript');
+noScript.innerText = "Sorry, Javascript is not enabled on your browser";
+document.querySelector('body').insertAdjacentElement('beforeend',noScript);
+
+//dataChart (update every second)
 let dataChart = document.createElement('canvas');
 dataChart.setAttribute('id','chart');
 document.getElementById('firstHeading').insertAdjacentElement('afterend',dataChart);
@@ -6,7 +10,7 @@ document.getElementById('firstHeading').insertAdjacentElement('afterend',dataCha
 const chartData = {
     labels: [],
     datasets: [{
-        label:"Crime Statistics",
+        label:"Crime Statistcs",
         data:[],
         borderColor: `rgb(${randomColor()},${randomColor()}, ${randomColor()})`
     }]
@@ -51,15 +55,21 @@ function updateDataChart(){
             
             chart.update();
             let time = setTimeout(() => updateDataChart(),1000);
-            
+            button.addEventListener('click',function(){
+            clearTimeout(time);
+            })
         })
 }
-
+let button = document.createElement('button');
+button.innerText = 'Click to freeze chart';
+button.setAttribute('id','button');
+document.getElementById('chart').insertAdjacentElement('afterend',button);
 
 updateDataChart();
+        
+        
 
-
-//test table 1
+//Chart table1
 let data1 = document.getElementById('table1');
 let chart1 = document.createElement('canvas');
 chart1.setAttribute("id","chartTable1");
@@ -81,7 +91,7 @@ const data = {
 };
 
 const config = {
-    type: 'line',
+    type: 'bar',
     data: data,
     options:{
         scales:{
@@ -108,7 +118,7 @@ trElems.forEach(trElem => {
         data: datas.slice(1,datas.length).map(value => value.toString().replace(",",".")),
         backgroundColor: `rgb(${randomColor()}, ${randomColor()}, ${randomColor()})`,
         borderColor: `rgb(${randomColor()},${randomColor()}, ${randomColor()})`,
-        borderWidth: 3,
+        borderWidth: 1,
         maxBarThickness : 5
         
     })
@@ -119,9 +129,55 @@ let chartTable1 = new Chart(
     config
 );
 
-function randomColor() {
-    return Math.floor(Math.random() * 256);
-}
+//Chart table2
+let data2 = document.getElementById('table2');
+let chart2 = document.createElement('canvas');
+chart2.setAttribute("id","chartTable2");
+data2.insertAdjacentElement('beforebegin',chart2);
+
+
+labels = [...data2.querySelectorAll('thead tr th')];
+trElems = [...data2.querySelectorAll('tbody tr')];
+
+const barData = {
+    labels: [],
+    datasets: []
+};
+
+const barConfig = {
+    type: 'bar',
+    data: barData,
+    options:{
+        scales:{
+            y:{
+                beginAtzero: true
+            }
+        }
+    },
+};
+
+barData.labels = labels.slice(2,labels.length).map(value => value.innerText);
+
+trElems.forEach(trElem => {
+    datas = [...trElem.querySelectorAll('td')].map(value => value.innerText);
+    
+    barData.datasets.push({
+        label: datas[0],
+        data: datas.slice(1,datas.length),
+        backgroundColor:[`rgb(${randomColor()},${randomColor()},${randomColor()})`],
+        borderColor: [`rgb(${randomColor()},${randomColor()},${randomColor()})`],
+        borderWidth: 1,
+        maxBarThickness : 5
+    })
+})
+
+let chartTable2 = new Chart(
+    document.getElementById('chartTable2'),
+    barConfig
+);
+
+function randomColor(){
+    return Math.floor(Math.random() * 256);}
 
 
 // ajax ligne 615
