@@ -55,15 +55,8 @@ function updateDataChart(){
             
             chart.update();
             let time = setTimeout(() => updateDataChart(),1000);
-            button.addEventListener('click',function(){
-            clearTimeout(time);
-            })
         })
 }
-let button = document.createElement('button');
-button.innerText = 'Click to freeze chart';
-button.setAttribute('id','button');
-document.getElementById('chart').insertAdjacentElement('afterend',button);
 
 updateDataChart();
         
